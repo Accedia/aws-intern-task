@@ -8,8 +8,7 @@ exports.handler = async (event) => {
         "TableName" : "Users",
         "ProjectionExpression" : "username"
     };
-    
-    var avatars = [];
+
     try{
         var users = (await ddb.scan(params).promise()).Items;
         
@@ -18,14 +17,13 @@ exports.handler = async (event) => {
                 Bucket: srcBucket,
                 Key: users[i].username.S
             }).promise();
-            console.log(data.Body);
-            avatars[i] = data.Body.toString('base64');
+            users[i].avatar = data.Body.toString('base64');
         }        
     }catch(err){
-        avatars = err.message;
+        users = err.message;
     }
-    console.log(avatars);
-    return avatars;
+    console.log(users);
+    return users;
 
 };
     
