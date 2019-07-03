@@ -1,0 +1,12 @@
+{
+    "name": "getAllItems",
+    "version": "1.0.0",
+    "description": "A node project to get all users from db",
+    "main": "index.js",
+    "scripts": {
+        "start": "npm run dev"
+    },
+    "dependencies": {
+        "joi": "^14.3.1"
+    }
+}
