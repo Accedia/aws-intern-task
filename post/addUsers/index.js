@@ -8,8 +8,8 @@ exports.handler = async(event) => {
     const type = event.image.split(";")[0].split("/")[1];
     const base64String = event.image.replace(/^data:image\/\w+;base64,/, "");
     console.log(base64String);
-    const base64Data = Buffer.alloc(calculateImageSize(base64String), base64String, 'base64');
-
+    const base64Data = Buffer.from(base64String, 'base64');
+    
     let params = {
         Bucket: srcBucket,
         Key: `${event.username}`,
@@ -64,14 +64,3 @@ exports.handler = async(event) => {
     );
     return addingUser;
 };
-
-function calculateImageSize(base64String) {
-    let padding, inBytes, base64StringLength;
-    if (base64String.endsWith("==")) padding = 2;
-    else if (base64String.endsWith("=")) padding = 1;
-    else padding = 0;
-
-    base64StringLength = base64String.length;
-    inBytes = (base64StringLength / 4) * 3 - padding;
-    return inBytes;
-}
