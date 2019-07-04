@@ -34,7 +34,7 @@ exports.handler = async(event) => {
         ContentType: `image/${type}`
     }
     
-    let avatarUrl = await s3.upload(imageUpload).promise();
+    const uploadedImage = await s3.upload(imageUpload).promise();
     console.log("Avatar url created:"); 
     console.log(avatarUrl.Location);
     const userToBeInserted = {
@@ -55,7 +55,7 @@ exports.handler = async(event) => {
                 S: event.email
             },
             "avatarUrl": {
-                S: avatarUrl.Location
+                S: uploadedImage.Location
             }
         },
         "TableName": "Users"
