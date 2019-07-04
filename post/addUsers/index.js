@@ -36,7 +36,7 @@ exports.handler = async(event) => {
     
     const imageResponse = await s3.upload(imageUpload).promise();
     console.log("Avatar url created:"); 
-    console.log(avatarUrl.Location);
+    console.log(imageUpload.Location);
     const userToBeInserted = {
         Item: {
             "username": {
