@@ -1,21 +1,27 @@
-var AWS = require('aws-sdk');
-var Joi = require('joi');
+const AWS = require('aws-sdk');
 
-AWS.config.update({region: 'us-east-2'});
+AWS.config.update(
+    {
+        region: 'us-east-2'
+    }
+);
 
 exports.handler = async (event) => {    
-    var ddb = new AWS.DynamoDB();    
-    var params = {
+    const ddb = new AWS.DynamoDB();    
+    const params = 
+    {
         "TableName" : "Users"
     };
+
     console.log("Fetching all users from db...");
-    var result;
+    let result;
     
-    try{
-        result = await ddb.scan(params).promise();
-        result = result.Items
-(await ddb.scan(params).promise()).Items
-    }catch(err){
+    try
+    {
+        result = (await ddb.scan(params).promise()).Items;
+    }
+    catch(err)
+    {
         result = err.message;
     }
 

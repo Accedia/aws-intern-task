@@ -6,7 +6,5 @@
     "scripts": {
         "start": "npm run dev"
     },
-    "dependencies": {
-        "joi": "^14.3.1"
-    }
+    "dependencies": {}
 }
