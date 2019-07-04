@@ -5,11 +5,9 @@ const srcBucket = "accedia-users-avatars";
 const table = "Users";
 
 exports.handler = async(event) => {
-    // Some way we have to give the user through the event
     const ddb = new AWS.DynamoDB();
     const type = event.image.split(";")[0].split("/")[1];
     const base64String = event.image.replace(/^data:image\/\w+;base64,/, "");
-    console.log(base64String);
     const base64Data = Buffer.from(base64String, 'base64');
     
     let userWithUsername = {
@@ -18,12 +16,11 @@ exports.handler = async(event) => {
         KeyConditionExpression: "username = :user ",
         ExpressionAttributeValues: {
             ":user": {
-                S: "Drugaru"
+                S: event.username
             }
         }
     }
     let hasUser = await ddb.query(userWithUsername).promise();
-    console.log(hasUser);
     
     if(hasUser.Count > 0){
         return "Username in use!";
