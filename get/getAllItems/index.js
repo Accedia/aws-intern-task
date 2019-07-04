@@ -14,7 +14,7 @@ exports.handler = async (event) => {
     try{
         result = await ddb.scan(params).promise();
         result = result.Items
-        
+(await ddb.scan(params).promise()).Items
     }catch(err){
         result = err.message;
     }
