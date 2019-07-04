@@ -8,7 +8,6 @@ const table = "Users";
 
 exports.handler = async (event) => {
     let username = event.username;
-    console.log("Deleting " + username + "...");
     const imageToDelete = {
         Bucket: srcBucket,
         Key: username
@@ -34,6 +33,7 @@ exports.handler = async (event) => {
     if(userFound.Count == 0){
         result = "No such user";
     }else{
+        console.log("Deleting " + username + "!");
         await s3.deleteObject(imageToDelete).promise();
         await docClient.delete(userToDelete).promise();
         result = userToDelete.Key;
