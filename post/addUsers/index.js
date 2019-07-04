@@ -3,9 +3,9 @@ AWS.config.update({ region: "us-east-2" });
 const s3 = new AWS.S3();
 const srcBucket = "accedia-users-avatars";
 const table = "Users";
+const ddb = new AWS.DynamoDB();
 
 exports.handler = async(event) => {
-    const ddb = new AWS.DynamoDB();
     const type = event.image.split(";")[0].split("/")[1];
     const base64String = event.image.replace(/^data:image\/\w+;base64,/, "");
     const base64Data = Buffer.from(base64String, 'base64');
@@ -34,7 +34,7 @@ exports.handler = async(event) => {
         ContentType: `image/${type}`
     }
     
-    const uploadedImage = await s3.upload(imageUpload).promise();
+    const imageResponse = await s3.upload(imageUpload).promise();
     console.log("Avatar url created:"); 
     console.log(avatarUrl.Location);
     const userToBeInserted = {
@@ -55,12 +55,12 @@ exports.handler = async(event) => {
                 S: event.email
             },
             "avatarUrl": {
-                S: uploadedImage.Location
+                S: imageResponse.Location
             }
         },
         "TableName": "Users"
     };
 
     await ddb.putItem(userToBeInserted).promise();
-    return { Successful : true };
+    return userToBeInserted.Item;
 };
