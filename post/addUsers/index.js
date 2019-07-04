@@ -2,6 +2,8 @@ const AWS = require('aws-sdk');
 AWS.config.update({ region: "us-east-2" });
 const s3 = new AWS.S3();
 const srcBucket = "accedia-users-avatars";
+const table = "Users";
+
 exports.handler = async(event) => {
     // Some way we have to give the user through the event
     const ddb = new AWS.DynamoDB();
@@ -10,26 +12,35 @@ exports.handler = async(event) => {
     console.log(base64String);
     const base64Data = Buffer.from(base64String, 'base64');
     
-    let params = {
+    let userWithUsername = {
+        TableName: table,
+        ProjectionExpression: "username",
+        KeyConditionExpression: "username = :user ",
+        ExpressionAttributeValues: {
+            ":user": {
+                S: "Drugaru"
+            }
+        }
+    }
+    let hasUser = await ddb.query(userWithUsername).promise();
+    console.log(hasUser);
+    
+    if(hasUser.Count > 0){
+        return "Username in use!";
+    }
+    
+    let imageUpload = { 
         Bucket: srcBucket,
         Key: `${event.username}`,
         Body: base64Data,
         ContentEncoding: 'base64',
         ContentType: `image/${type}`
     }
-
-    let avatarUrl = await new Promise((resolve, reject) => {
-        s3.upload(params, (err, data) => {
-                if (err) { reject(err) }
-                console.log('Image successfully uploaded.');
-                resolve(data.Location);
-        })
-    });
-
+    
+    let avatarUrl = await s3.upload(imageUpload).promise();
     console.log("Avatar url created:"); 
-    console.log(avatarUrl);
-
-    params = {
+    console.log(avatarUrl.Location);
+    const userToBeInserted = {
         Item: {
             "username": {
                 S: event.username
@@ -47,20 +58,12 @@ exports.handler = async(event) => {
                 S: event.email
             },
             "avatarUrl": {
-                S: avatarUrl
+                S: avatarUrl.Location
             }
         },
         "TableName": "Users"
     };
 
-    const addingUser = await new Promise((resolve, reject) => ddb.putItem(params, (err, result) => {
-            if (err) {
-                console.log(err);
-                reject(err);
-            }
-            console.log("User successfully created");
-            resolve("User successfully created!");
-        })
-    );
-    return addingUser;
+    await ddb.putItem(userToBeInserted).promise();
+    return { Successful : true };
 };
