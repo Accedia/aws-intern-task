@@ -16,6 +16,7 @@ exports.handler = async (event) => {
         for(let i = 0; i < users.length; i++){
             result.body[i] = users[i].avatarUrl.S;
         }        
+        result.body = JSON.stringify(result.body);
     }catch(err){
         console.log(err);
         result = {
