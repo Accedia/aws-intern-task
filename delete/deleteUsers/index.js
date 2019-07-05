@@ -7,7 +7,7 @@ const docClient = new AWS.DynamoDB.DocumentClient();
 const table = "Users";
 
 exports.handler = async (event) => {
-    const username = event.username;
+    let username = event.username;
     const imageToDelete = {
         Bucket: srcBucket,
         Key: username
@@ -30,13 +30,19 @@ exports.handler = async (event) => {
     }
     const userFound = await ddb.query(userToDeleteCheck).promise();
     let result;
-    if(userFound.Count == 0) {
-        result = "No such user";
-    } else {
+    if(userFound.Count == 0){
+        result = {
+            statusCode: 404,
+            body: "No such user"
+        };
+    }else{
         console.log("Deleting " + username + "!");
         await s3.deleteObject(imageToDelete).promise();
         await docClient.delete(userToDelete).promise();
-        result = userToDelete.Key;
+        result = {
+            statusCode: 200,
+            body: JSON.stringify(userToDelete.Key)
+        };
     }
     return result;
 }
