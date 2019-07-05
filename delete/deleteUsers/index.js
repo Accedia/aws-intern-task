@@ -30,9 +30,9 @@ exports.handler = async (event) => {
     }
     const userFound = await ddb.query(userToDeleteCheck).promise();
     let result;
-    if(userFound.Count == 0){
+    if(userFound.Count == 0) {
         result = "No such user";
-    }else{
+    } else {
         console.log("Deleting " + username + "!");
         await s3.deleteObject(imageToDelete).promise();
         await docClient.delete(userToDelete).promise();
