@@ -4,7 +4,7 @@ const ddb = new AWS.DynamoDB();
 exports.handler = async (event) => {    
     const params = {
         "TableName" : "Users",
-        "ProjectionExpression" : "username"
+        "ProjectionExpression" : "avatarUrl"
     };
     let result;
     try{
@@ -14,15 +14,15 @@ exports.handler = async (event) => {
             body: []
         }
         for(let i = 0; i < users.length; i++){
-            result.body += users[i].avatarUrl;
+            result.body[i] = users[i].avatarUrl.S;
         }        
     }catch(err){
+        console.log(err);
         result = {
             body: "Internal server error!",
             statusCode: 500 
         }
     }
-    console.log(result);
     return result;
 };
     
