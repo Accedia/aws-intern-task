@@ -7,7 +7,7 @@ const docClient = new AWS.DynamoDB.DocumentClient();
 const table = "Users";
 
 exports.handler = async (event) => {
-    let username = event.username;
+    const username = event.username;
     const imageToDelete = {
         Bucket: srcBucket,
         Key: username
