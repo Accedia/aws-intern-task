@@ -22,13 +22,11 @@ exports.handler = async (event) => {
         }
     }
     const userResults = await ddb.scan(userWithUsername).promise();    
-    let response = new Response();
+    let response;
     if(!userResults.Count){
-        response.statusCode = 404;
-        response.body = "No such user";
+        response = new Response(404, "No such user");
     }else{
-        response.statusCode = 200;
-        response.body = JSON.stringify(userResults.Items);
+        response = new Response(200, JSON.stringify(userResults.Items));
     }
     return response;
 }
