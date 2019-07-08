@@ -4,7 +4,12 @@ const ddb = new AWS.DynamoDB();
 const table = "Users";
 AWS.config.update({region : "us-east-2"});
 // const documentClient = new AWS.DynamoDB.DocumentClient();
-
+class Response {
+    constructor(statusCode, body){
+        this.statusCode = statusCode;
+        this.body = body;
+    };       
+}
 exports.handler = async (event) => {
     const username = event.pathParameters.username;
     const userWithUsername = {
@@ -16,17 +21,14 @@ exports.handler = async (event) => {
             }
         }
     }
-    
-    const userResults = await ddb.scan(userWithUsername).promise();
-    console.log(userResults);
-    let result = {};
+    const userResults = await ddb.scan(userWithUsername).promise();    
+    let response = new Response();
     if(!userResults.Count){
-        result["statusCode"] = 404;
-        result["body"] = "No such user";
+        response.statusCode = 404;
+        response.body = "No such user";
     }else{
-        result["statusCode"] = 200;
-        result["body"] = userResults.Items;
-        result["body"] = JSON.stringify(result["body"]);
+        response.statusCode = 200;
+        response.body = JSON.stringify(userResults.Items);
     }
-    return result;
+    return response;
 }

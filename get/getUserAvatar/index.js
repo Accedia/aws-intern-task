@@ -18,10 +18,9 @@ exports.handler = async (event) => {
         }        
         result.body = JSON.stringify(result.body);
     }catch(err){
-        console.log(err);
         result = {
-            body: "Internal server error!",
-            statusCode: 500 
+            body: "Bad request!",
+            statusCode: 400 
         }
     }
     return result;

@@ -31,7 +31,7 @@ exports.handler = async (event) => {
     catch(err)
     {
         result = {
-            statusCode: 500,
+            statusCode: 400,
             body: err.message
         }
     }
