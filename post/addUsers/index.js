@@ -11,10 +11,10 @@ exports.handler = async(event) => {
     const base64Data = Buffer.from(base64String, 'base64');
     const requiredSchema = Joi.object().keys({
         username: Joi.string().alphanum().min(3).max(30).required(),
-        firstName: Joi.string().alphanum(),
-        lastName: Joi.string().alphanum(),
-        password: Joi.string().min(3),
-        email: Joi.string().email(),
+        firstName: Joi.string().alphanum().required(),
+        lastName: Joi.string().alphanum().required(),
+        password: Joi.string().min(3).required(),
+        email: Joi.string().email().required(),
         image: Joi.string()
     });
     const isValid = requiredSchema.validate(event);
