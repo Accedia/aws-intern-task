@@ -1,0 +1,20 @@
+<button id="registerer">Register a new user!</button>
+
+<div id="register-form">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <label for="username">Username: </label>
+        <input class="register" type="text" formControlName="username" name="username" placeholder="username">
+        <label for="firstName">First Name: </label>
+        <input class="register" type="text" formControlName="firstName" name="firstName" placeholder="first name">
+        <label for="lastName">Last Name: </label>
+        <input class="register" type="text" formControlName="lastName" name="lastName" placeholder="last name">
+        <label for="password">Password: </label>
+        <input class="register" type="password" formControlName="password" name="password" placeholder="password">
+        <label for="email">Email: </label>
+        <input class="register" type="email" formControlName="email" name="email" placeholder="email@gmail.com">
+        <!-- <label for="avatar">Avatar Image: </label> -->
+        <!-- <input class="register" type="file" formControlName="image" name="image" placeholder=""> -->
+        <button type="submit" [disabled]="!userForm.valid">Register!</button>
+    </form>
+
+</div>

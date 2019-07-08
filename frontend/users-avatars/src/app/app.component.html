@@ -1,0 +1,19 @@
+<div class="message success" *ngIf="success">{{success}}</div>
+<div class="message error" *ngIf="error">{{error}}</div>
+
+<div>
+  Searching for: <input (keyup)="search($event)" type="text" placeholder="<username>">
+</div>
+
+<div id="users-holder">
+  <div *ngIf="!users">
+    Nothing to be shown!
+  </div>
+  <div class="user-tabs" *ngFor="let user of users">
+    {{user.username.S}}
+    <button (click)="delete(user.username.S)">delete</button>
+  </div>  
+</div>  
+
+
+<app-add-users></app-add-users>
