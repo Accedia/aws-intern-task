@@ -6,17 +6,18 @@ const table = "Users";
 const ddb = new AWS.DynamoDB();
 const Joi = require('joi');
 exports.handler = async(event) => {
+    event = JSON.parse(event.body);
     const type = event.image.split(";")[0].split("/")[1];
     const base64String = event.image.replace(/^data:image\/\w+;base64,/, "");
     const base64Data = Buffer.from(base64String, 'base64');
-    const requiredSchema = Joi.object().keys({
+    const requiredSchema = Joi.object().keys( {
         username: Joi.string().alphanum().min(3).max(30).required(),
-        firstName: Joi.string().alphanum().required(),
-        lastName: Joi.string().alphanum().required(),
-        password: Joi.string().min(3).required(),
-        email: Joi.string().email().required(),
+        firstName: Joi.string().alphanum(),
+        lastName: Joi.string().alphanum(),
+        password: Joi.string().min(3),
+        email: Joi.string().email(),
         image: Joi.string()
-    });
+    } );
     const isValid = requiredSchema.validate(event);
     console.log(isValid);
     if(isValid.error !== null) {
@@ -36,7 +37,7 @@ exports.handler = async(event) => {
         }
     }
     const hasUser = await ddb.query(userWithUsername).promise();
-    if(hasUser.Count > 0){
+    if(hasUser.Count > 0) {
         return {
             statusCode: 409,
             body: "Username in use!"
