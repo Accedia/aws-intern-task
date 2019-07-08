@@ -31,12 +31,18 @@ exports.handler = async (event) => {
     const userFound = await ddb.query(userToDeleteCheck).promise();
     let result;
     if(userFound.Count == 0){
-        result = "No such user";
+        result = {
+            statusCode: 404,
+            body: "No such user"
+        };
     }else{
         console.log("Deleting " + username + "!");
         await s3.deleteObject(imageToDelete).promise();
         await docClient.delete(userToDelete).promise();
-        result = userToDelete.Key;
+        result = {
+            statusCode: 200,
+            body: JSON.stringify(userToDelete.Key)
+        };
     }
     return result;
 }
