@@ -1,1 +1,68 @@
 /* You can add global styles to this file, and also import other style files */
+
+$error-message-bgcolor: rgb(232, 54, 9);
+$error-message-txtcolor: white;
+$success-message-bgcolor: rgb(9, 232, 20);
+$success-message-txtcolor: white;
+
+
+
+html{
+    height: 100%;
+    width: 100%;
+    body{
+        height: 90%;
+        width: 70%;
+        margin: auto;
+        margin-top: 2.5%;
+        padding: 10px;
+        box-shadow: 5px 10px 8px #888888;
+        border: 1px solid black;
+        background-color: white;
+    }
+    background-image: linear-gradient(0deg, #c2e59c, #64b3f4);
+}
+
+.text-center{
+    text-align: center;
+}
+
+.center-flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.message{
+    text-align: center;
+    height: 20px;
+    width: 90%;
+    padding: 10px;
+    margin: 20px auto;
+    &.error{
+        background-color: $error-message-bgcolor;
+        color: $error-message-txtcolor
+    }
+    &.success{
+        background-color: $success-message-bgcolor;
+        color: $success-message-txtcolor
+    }
+}
+
+span{
+    height: fit-content;
+}
+
+button.btn{
+    background: none;
+    border: none;
+}
+
+form.cool-form{
+    input{
+        margin-bottom: 10px;
+    }
+    label{
+        font-size: 0.75em;
+    }
+}

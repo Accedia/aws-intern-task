@@ -1,8 +1,10 @@
-<div class="message success" *ngIf="success">{{success}}</div>
-<div class="message error" *ngIf="error">{{error}}</div>
+<h1 class="text-center">Users & Avatars</h1>
 
-<div>
-  Searching for: <input (keyup)="search($event)" type="text" placeholder="<username>">
+<div class="message success center-flex" *ngIf="success"><span>{{success}}</span></div>
+<div class="message error center-flex" *ngIf="error"><span>{{error}}</span></div>
+
+<div id="search-div">
+  Searching for: <input (keyup)="search($event)" type="text" placeholder="username">
 </div>
 
 <div id="users-holder">
@@ -10,10 +12,9 @@
     Nothing to be shown!
   </div>
   <div class="user-tabs" *ngFor="let user of users">
-    {{user.username.S}}
-    <button (click)="delete(user.username.S)">delete</button>
+    <div class="user-username">{{user.username.S}}</div>
+    <button class="btn" (click)="delete(user.username.S)" [title]="'delete ' + user.username.S"><i class="fas fa-times"></i></button>
   </div>  
 </div>  
 
-
-<app-add-users [users]="users"></app-add-users>
+<app-add-users [users]="users" (success)="updateSuccess($event)" (error)="updateError($event)">Loading...</app-add-users>

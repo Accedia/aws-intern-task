@@ -1,0 +1,20 @@
+#search-div{
+    margin:auto;
+    width: fit-content;
+}
+
+#users-holder{
+    margin-top: 30px;
+}
+
+.user-tabs{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 30px;
+    border: 1px solid #64b3f4;
+    padding: 0 20px;
+    &:hover{
+        box-shadow: 3px 4px 4px grey, 3px -1px 4px grey;
+    }
+}

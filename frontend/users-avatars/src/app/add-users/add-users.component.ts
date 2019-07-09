@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/services/users.service';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Input } from '@angular/core';
+import { Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-add-users',
@@ -10,9 +10,9 @@ import { Input } from '@angular/core';
 })
 
 export class AddUsersComponent implements OnInit{
-  success:string;
-  error:string;
   @Input() users;
+  @Output() success = new EventEmitter<string>();
+  @Output() error = new EventEmitter<string>();
   showRegister = false; 
   userFormReady = false;
 
@@ -30,14 +30,11 @@ export class AddUsersComponent implements OnInit{
   ngOnInit(){}
 
   private onSubmit(){
-    console.log(this.userForm.value);
     this.usersService.addUser(this.userForm.value).subscribe(newUser => {
-        this.success = "Successfully added user " + newUser[0].username.S;
-        this.users.push(newUser[0]);
-
+        this.success.emit("Successfully added user " + newUser.username.S);
+        this.users.push(newUser);
     }, error => {
-        console.log(error);
-        this.error = error.error;
+        this.error.emit(error.error);
     });
   }
 
@@ -55,7 +52,7 @@ export class AddUsersComponent implements OnInit{
       me.userFormReady = true;
     };
     reader.onerror = function (error) {
-      console.log('Error: ', error);
+      console.log(error);
     };
  }
 }

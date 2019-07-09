@@ -1,23 +1,23 @@
 
 <button id="registerer" (click)="toggleRegisterForm()">Register a new user!</button>
-<div class="message error">{{success}}</div>
-<div class="message success">{{error}}</div>
-<ng-container *ngIf="showRegister">
-    <div id="register-form">
-        <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-            <label for="username">Username: </label>
-            <input class="register" type="text" formControlName="username" name="username" placeholder="username">
-            <label for="firstName">First Name: </label>
-            <input class="register" type="text" formControlName="firstName" name="firstName" placeholder="first name">
-            <label for="lastName">Last Name: </label>
-            <input class="register" type="text" formControlName="lastName" name="lastName" placeholder="last name">
-            <label for="password">Password: </label>
-            <input class="register" type="password" formControlName="password" name="password" placeholder="password">
-            <label for="email">Email: </label>
-            <input class="register" type="email" formControlName="email" name="email" placeholder="email@gmail.com">
-            <label for="image">Avatar Image: </label>
-            <input class="register" type="file" formControlName="image" name="image" placeholder="" (change)="getBase64($event)">
-            <button type="submit" [disabled]="!userFormReady">Register!</button>
-        </form>
-    </div>
-</ng-container>
+<div class="center-flex">
+    <ng-container *ngIf="showRegister">
+        <div id="register-form">
+            <form [formGroup]="userForm" class="cool-form" (ngSubmit)="onSubmit()">
+                <label for="username">Username: </label>
+                <input class="register" type="text" formControlName="username" name="username" >
+                <label for="firstName">First Name: </label>
+                <input class="register" type="text" formControlName="firstName" name="firstName">
+                <label for="lastName">Last Name: </label>
+                <input class="register" type="text" formControlName="lastName" name="lastName">
+                <label for="password">Password: </label>
+                <input class="register" type="password" formControlName="password" name="password">
+                <label for="email">Email: </label>
+                <input class="register" type="email" formControlName="email" name="email">
+                <label for="image">Avatar Image: </label>
+                <input class="register" type="file" formControlName="image" name="image"  (change)="getBase64($event)">
+                <button type="submit" [disabled]="!userFormReady">Register!</button>
+            </form>
+        </div>
+    </ng-container>
+</div>
