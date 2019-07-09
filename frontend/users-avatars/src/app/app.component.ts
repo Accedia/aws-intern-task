@@ -38,6 +38,7 @@ export class AppComponent implements OnInit {
         this.users.splice(i, 1); 
       }
     }
+
     this.userService.deleteByName(username).subscribe(deletedUser => {
       console.log(deletedUser);
       this.success = deletedUser[0].username + " successfully deleted!";

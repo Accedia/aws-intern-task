@@ -15,7 +15,9 @@
             <input class="register" type="password" formControlName="password" name="password" placeholder="password">
             <label for="email">Email: </label>
             <input class="register" type="email" formControlName="email" name="email" placeholder="email@gmail.com">
-            <button type="submit" [disabled]="!userForm.valid">Register!</button>
+            <label for="image">Avatar Image: </label>
+            <input class="register" type="file" formControlName="image" name="image" placeholder="" (change)="getBase64($event)">
+            <button type="submit" [disabled]="!userFormReady">Register!</button>
         </form>
     </div>
 </ng-container>
