@@ -21,7 +21,7 @@ export class UsersService {
     return this.httpService.get<any>(this.url+"/"+name);
   }
 
-  public deleteByName(name: string){
+  public deleteByName(name: string): Observable<any>{
     return this.httpService.delete<any>(this.url+"?username="+name);
   }
 

@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
     this.updateList(); 
   }  
 
-  private updateList(){
+  protected updateList(){
     this.userService.list().subscribe(users => {
       this.users = users;
     });
@@ -33,13 +33,16 @@ export class AppComponent implements OnInit {
   }
 
   public delete(username) {
-    
+    for( var i = 0; i < this.users.length; i++){ 
+      if (this.users[i].username.S === username) {
+        this.users.splice(i, 1); 
+      }
+    }
     this.userService.deleteByName(username).subscribe(deletedUser => {
-      this.updateList();
       console.log(deletedUser);
-      // this.success = deletedUser.username + "successfully deleted!";
+      this.success = deletedUser[0].username + " successfully deleted!";
     }, error => {
-      // this.error = error;
+      this.error = error;
     })
   }
 }
