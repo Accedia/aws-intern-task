@@ -18,3 +18,14 @@
         box-shadow: 3px 4px 4px grey, 3px -1px 4px grey;
     }
 }
+
+
+.user-username:hover{
+    cursor: pointer;
+}
+
+#avatar-image{
+    height: auto;
+    width: 30%;
+    border: 2px solid #64b3f4;
+}

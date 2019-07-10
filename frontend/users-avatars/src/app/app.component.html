@@ -8,13 +8,19 @@
 </div>
 
 <div id="users-holder">
-  <div *ngIf="!users">
+  <div *ngIf="!displayedUsers.length">
     Nothing to be shown!
   </div>
-  <div class="user-tabs" *ngFor="let user of users">
-    <div class="user-username">{{user.username.S}}</div>
+  <div class="user-tabs" *ngFor="let user of displayedUsers">
+    <div class="user-username" (click)="openModal(user.avatarUrl.S)">{{user.username.S}}</div>
     <button class="btn" (click)="delete(user.username.S)" [title]="'delete ' + user.username.S"><i class="fas fa-times"></i></button>
   </div>  
 </div>  
 
-<app-add-users [users]="users" (success)="updateSuccess($event)" (error)="updateError($event)">Loading...</app-add-users>
+<div class="modal" id="avatar-modal" (click)="closeModal()">
+  <div class="modal-content center-flex">
+    <img id="avatar-image" alt="User avatar comes here...">
+  </div>
+</div>
+
+<app-add-users [users]="displayedUsers" (success)="updateSuccess($event)" (error)="updateError($event)">Loading...</app-add-users>
