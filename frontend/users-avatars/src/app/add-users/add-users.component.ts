@@ -16,26 +16,32 @@ export class AddUsersComponent implements OnInit{
   showRegister = false; 
   userFormReady = false;
   imageBase64;
-  public userForm = new FormGroup({
-    username: new FormControl(''),
-    firstName: new FormControl(''),
-    lastName: new FormControl(''),
-    password: new FormControl(''),
-    email: new FormControl(''),
-    image: new FormControl('')
-  });
+  userForm: any;
+  
+  private createForm() {
+    this.userForm = new FormGroup({
+      username: new FormControl(''),
+      firstName: new FormControl(''),
+      lastName: new FormControl(''),
+      password: new FormControl(''),
+      email: new FormControl(''),
+      image: new FormControl('')
+    });
+  }
   
   constructor(private usersService: UsersService) {}
 
-  ngOnInit(){}
+  ngOnInit(){
+    this.createForm();
+  }
 
   private onSubmit(){
-
     this.userForm.value.image = this.imageBase64;
     this.usersService.addUser(this.userForm.value).subscribe(newUser => {
         this.success.emit("Successfully added user " + newUser.username.S);
         console.log(this.userForm.value);
         this.users.push(newUser);
+        this.createForm();
     }, error => {
         this.error.emit(error.error);
     });
@@ -46,16 +52,15 @@ export class AddUsersComponent implements OnInit{
   }
 
   public getBase64(event: any) {
-    let me = this;
     let file = event.target.files[0];
     let reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = function () {
-      me.imageBase64 = reader.result;
-      me.userFormReady = true;
-      console.log(me.userForm.value);
+    reader.onload = () => {
+      this.imageBase64 = reader.result;
+      this.userFormReady = true;
+      console.log(this.userForm.value);
     };
-    reader.onerror = function (error) {
+    reader.onerror = (error) => {
       console.log(error);
     };
  }
