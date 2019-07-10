@@ -4,13 +4,29 @@ const s3 = new AWS.S3();
 const srcBucket = "accedia-users-avatars";
 const table = "Users";
 const ddb = new AWS.DynamoDB();
-
+const Joi = require('joi');
 exports.handler = async(event) => {
+    event = JSON.parse(event.body);
     const type = event.image.split(";")[0].split("/")[1];
     const base64String = event.image.replace(/^data:image\/\w+;base64,/, "");
     const base64Data = Buffer.from(base64String, 'base64');
-    
-    let userWithUsername = {
+    const requiredSchema = Joi.object().keys( {
+        username: Joi.string().alphanum().min(3).max(30).required(),
+        firstName: Joi.string().alphanum().required(),
+        lastName: Joi.string().alphanum().required(),
+        password: Joi.string().min(3).required(),
+        email: Joi.string().email().required(),
+        image: Joi.string()
+    } );
+    const isValid = requiredSchema.validate(event);
+    console.log(isValid);
+    if(isValid.error !== null) {
+        return {
+            statusCode: 406,
+            body: isValid.error.message
+        }
+    } 
+    const userWithUsername = {
         TableName: table,
         ProjectionExpression: "username",
         KeyConditionExpression: "username = :user ",
@@ -20,20 +36,20 @@ exports.handler = async(event) => {
             }
         }
     }
-    let hasUser = await ddb.query(userWithUsername).promise();
-    
-    if(hasUser.Count > 0){
-        return "Username in use!";
+    const hasUser = await ddb.query(userWithUsername).promise();
+    if(hasUser.Count > 0) {
+        return {
+            statusCode: 409,
+            body: "Username in use!"
+        };
     }
-    
-    let imageUpload = { 
+    const imageUpload = { 
         Bucket: srcBucket,
         Key: `${event.username}`,
         Body: base64Data,
         ContentEncoding: 'base64',
         ContentType: `image/${type}`
     }
-    
     const imageResponse = await s3.upload(imageUpload).promise();
     console.log("Avatar url created:"); 
     console.log(imageUpload.Location);
@@ -60,7 +76,10 @@ exports.handler = async(event) => {
         },
         "TableName": "Users"
     };
-
+    
     await ddb.putItem(userToBeInserted).promise();
-    return userToBeInserted.Item;
+    return {
+        statusCode: 200,
+        body: JSON.stringify(userToBeInserted.Item)
+    };
 };
