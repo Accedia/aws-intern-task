@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/services/users.service';
+import { LoaderService } from 'src/services/loader.service';
 
 @Component({
   selector: 'app-root',
@@ -12,19 +13,25 @@ export class AppComponent implements OnInit {
   public displayedUsers: any[] = [];
   public allUsers: any[] = [];
   public success = null;
-  public error = null
+  public error = null 
   private messageDisplayTimeMs = 3000;
+  // public isLoading = true;
 
-  public constructor(private userService: UsersService) {}
+  public constructor(private userService: UsersService, private loaderService: LoaderService) {}
   
   public ngOnInit() {
+    this.loaderService.load();;
     this.userService.list().subscribe(users => {
       this.displayedUsers = users;
       this.allUsers = users;
+      this.loaderService.stopLoading();
+      // this.isLoading = false;
     });
   }  
   
   public search(event: any){
+    // this.isLoading = true;
+    // LoaderService.load();;
     let searchedUsers:any[] = [];
     let searchingFor = event.target.value.toLowerCase();
     for(var i = 0; i < this.allUsers.length; i++){
@@ -33,9 +40,14 @@ export class AppComponent implements OnInit {
       }
     }
     this.displayedUsers = searchedUsers;
+    // LoaderService.stopLoading();;
+    // this.isLoading = false;
   }
 
   public delete(username) {
+    // this.isLoading = true;
+    this.loaderService.load();;
+
     for( var i = 0; i < this.displayedUsers.length; i++){ 
       if (this.displayedUsers[i].username.S === username) {
         this.displayedUsers.splice(i, 1); 
@@ -43,8 +55,11 @@ export class AppComponent implements OnInit {
     }
     this.userService.deleteByName(username).subscribe(deletedUser => {
       this.updateSuccess(deletedUser.username + " successfully deleted!");
+      this.loaderService.stopLoading();
+      // this.isLoading = false;
     }, error => {
       this.updateError(error);
+      // this.isLoading = false;
     });
   }
 
@@ -69,10 +84,14 @@ export class AppComponent implements OnInit {
     }, this.messageDisplayTimeMs);
   }
 
-  updateError(message: string):void{
+  updateError( message: string):void{
     this.error = this.capitalize(message);
     setTimeout(() => {
-      this.error=null;
+      this.error = null;
     }, this.messageDisplayTimeMs);
   }
+
+  // loading(isLoading: boolean){
+    // this.isLoading = isLoading;
+  // }
 }

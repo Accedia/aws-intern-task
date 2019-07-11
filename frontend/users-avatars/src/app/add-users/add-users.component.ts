@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/services/users.service';
+import { LoaderService } from 'src/services/loader.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Input, Output, EventEmitter } from '@angular/core';
 
@@ -11,6 +12,7 @@ import { Input, Output, EventEmitter } from '@angular/core';
 
 export class AddUsersComponent implements OnInit{
   @Input() users;
+  @Output() isLoading = new EventEmitter<boolean>();
   @Output() success = new EventEmitter<string>();
   @Output() error = new EventEmitter<string>();
   showRegister = false; 
@@ -29,21 +31,27 @@ export class AddUsersComponent implements OnInit{
     });
   }
   
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService, private loaderService: LoaderService) {}
 
   ngOnInit(){
     this.createForm();
   }
 
   private onSubmit(){
+    this.loaderService.load();;
+    // this.isLoading.emit(true);
     this.userForm.value.image = this.imageBase64;
     this.usersService.addUser(this.userForm.value).subscribe(newUser => {
         this.success.emit("Successfully added user " + newUser.username.S);
         console.log(this.userForm.value);
         this.users.push(newUser);
         this.createForm();
-    }, error => {
+        // this.isLoading.emit(false);
+        this.loaderService.stopLoading();
+      }, error => {
         this.error.emit(error.error);
+        // this.isLoading.emit(false);
+        this.loaderService.stopLoading();
     });
   }
 

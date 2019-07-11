@@ -6,12 +6,14 @@ import { UsersService } from 'src/services/users.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AddUsersComponent } from './add-users/add-users.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoaderComponent } from './loader/loader.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    AddUsersComponent
+    AddUsersComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
