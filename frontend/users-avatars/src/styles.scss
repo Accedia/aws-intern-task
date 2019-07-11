@@ -5,12 +5,15 @@ $error-message-txtcolor: white;
 $success-message-bgcolor: rgb(9, 232, 20);
 $success-message-txtcolor: white;
 
+$cube-width: 250px;
+$cube-height: 100px;
+
 html{
     height: 100%;
     width: 100%;
     body{
         height: 90%;
-        width: 70%;
+        width: 50%;
         margin: auto;
         margin-top: 2.5%;
         padding: 10px;
@@ -58,6 +61,30 @@ button.btn{
     border: none;
 }
 
+button.cool-button{
+
+    border-radius: 25px;
+    &:focus{
+        outline: none;
+    }
+}
+
+
+// .cube {
+//     text-align: center;
+//     margin: 0 auto;
+// }
+
+// .default-state, .active-state {
+//     background: #2ecc71;
+
+//     font-size: 16px;
+//     text-transform: uppercase;
+//     color: #fff;
+//     line-height: @cube-height;
+//     .transition(background 250ms ease);
+// }
+
 form.cool-form{
     input{
         margin-bottom: 10px;
@@ -92,3 +119,4 @@ form.cool-form{
     width: 80%;
     overflow: auto;
 }
+

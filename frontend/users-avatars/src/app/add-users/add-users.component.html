@@ -1,5 +1,10 @@
 
-<button id="registerer" (click)="toggleRegisterForm()">Register a new user!</button>
+<button id="registerer" class="cool-button" (click)="toggleRegisterForm()"> 
+    <div class="center-flex">
+        <span id="plus">+</span> 
+        <!-- <span id="button-text">Register a new user!</span> -->
+    </div>
+</button>
 <div class="center-flex">
     <ng-container *ngIf="showRegister">
         <div id="register-form">
